@@ -1,5 +1,13 @@
 'use strict';
 
+// Объявление переменных и констант
+var QUANTITY_OF_IMAGES = 25;
+var imageList = document.querySelector('.pictures');
+var template = document.querySelector('#picture').content;
+var startImageNumber = 1;
+var images = [];
+var imagesList = [];
+
 // Получение случайного числа (утилитная функция)
 var getRandomNumber = function (number) {
   return Math.ceil(Math.random() * number);
@@ -11,9 +19,10 @@ var getRandomNumberFromTo = function (minNumber, maxNumber) {
   return Math.floor(number);
 };
 
-// Объявление переменных
-var imageList = document.querySelector('.pictures');
-var template = document.querySelector('#picture').content;
+// Получение случайного элемента из списка
+var getRandomElement = function (elementList) {
+  return elementList[getRandomNumber(elementList.length - 1)];
+};
 
 // Получение комментария
 var createComment = function () {
@@ -27,8 +36,8 @@ var createComment = function () {
   var NAMES = ['Иван', 'Даша', 'Маша', 'Александр', 'Катя', 'Оля'];
   var comment = {};
   comment.avatar = 'img/avatar-' + getRandomNumber(6) + '.svg';
-  comment.message = MESSAGES[getRandomNumber(MESSAGES.length - 1)];
-  comment.name = NAMES[getRandomNumber(NAMES.length - 1)];
+  comment.message = getRandomElement(MESSAGES);
+  comment.name = getRandomElement(NAMES);
   return comment;
 };
 
@@ -44,21 +53,24 @@ var createComments = function (quantityOfComments) {
 // Получение описания изображения
 var createImageDescription = function () {
   var image = {};
-  image.url = 'photos/' + getRandomNumber(25) + '.jpg';
+  image.url = 'photos/' + startImageNumber + '.jpg';
   image.description = 'Описание фотографии';
   image.likes = getRandomNumberFromTo(15, 200);
   image.comments = createComments(getRandomNumber(5));
+  startImageNumber++;
   return image;
 };
 
 // Получение списка описаний изображений
 var createImagesDescription = function (quantityOfImagesDescription) {
-  var images = [];
+  images = [];
   for (var i = 0; i < quantityOfImagesDescription; i++) {
     images[i] = createImageDescription();
   }
   return images;
 };
+
+createImagesDescription(QUANTITY_OF_IMAGES);
 
 // Создание изображения
 var renderImage = function (imageItem) {
@@ -70,13 +82,22 @@ var renderImage = function (imageItem) {
   return currentImage;
 };
 
+// Массив картинок
+var createImageList = function (imageObjects) {
+  imagesList = [];
+  imageObjects.forEach(function (item, i) {
+    imagesList[i] = renderImage(imageObjects[i]);
+  });
+  return imagesList;
+};
+
 // Отрисовка изобржений на странице
-var renderImages = function (quantityOfImages) {
+var renderImages = function (imagesObjectList) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < createImagesDescription(quantityOfImages).length; i++) {
-    fragment.appendChild(renderImage(createImagesDescription(quantityOfImages)[i]));
-  }
+  imagesObjectList.forEach(function (item, i) {
+    fragment.appendChild(imagesObjectList[i]);
+  });
   imageList.appendChild(fragment);
 };
 
-renderImages(25);
+renderImages(createImageList(images));
