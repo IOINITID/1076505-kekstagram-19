@@ -64,8 +64,6 @@ var createImagesDescription = function (quantityOfImagesDescription) {
   return images;
 };
 
-var images = createImagesDescription(QUANTITY_OF_IMAGES);
-
 // Создание изображения
 var renderImage = function (imageItem) {
   var template = document.querySelector('#picture').content;
@@ -87,4 +85,5 @@ var renderImages = function (imageObjects) {
   imageList.appendChild(fragment);
 };
 
-renderImages(images);
+var imageItems = createImagesDescription(QUANTITY_OF_IMAGES);
+renderImages(imageItems);
