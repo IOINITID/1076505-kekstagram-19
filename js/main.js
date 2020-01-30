@@ -2,11 +2,6 @@
 
 // Объявление переменных и констант
 var QUANTITY_OF_IMAGES = 25;
-var imageList = document.querySelector('.pictures');
-var template = document.querySelector('#picture').content;
-var startImageNumber = 1;
-var images = [];
-var imagesList = [];
 
 // Получение случайного числа (утилитная функция)
 var getRandomNumber = function (number) {
@@ -51,29 +46,29 @@ var createComments = function (quantityOfComments) {
 };
 
 // Получение описания изображения
-var createImageDescription = function () {
+var createImageDescription = function (index) {
   var image = {};
-  image.url = 'photos/' + startImageNumber + '.jpg';
+  image.url = 'photos/' + (index + 1) + '.jpg';
   image.description = 'Описание фотографии';
   image.likes = getRandomNumberFromTo(15, 200);
   image.comments = createComments(getRandomNumber(5));
-  startImageNumber++;
   return image;
 };
 
 // Получение списка описаний изображений
 var createImagesDescription = function (quantityOfImagesDescription) {
-  images = [];
+  var images = [];
   for (var i = 0; i < quantityOfImagesDescription; i++) {
-    images[i] = createImageDescription();
+    images[i] = createImageDescription(i);
   }
   return images;
 };
 
-createImagesDescription(QUANTITY_OF_IMAGES);
+var images = createImagesDescription(QUANTITY_OF_IMAGES);
 
 // Создание изображения
 var renderImage = function (imageItem) {
+  var template = document.querySelector('#picture').content;
   var currentImage = template.cloneNode(true);
   currentImage.querySelector('.picture__img').src = imageItem.url;
   currentImage.querySelector('.picture__img').alt = imageItem.description;
@@ -82,22 +77,14 @@ var renderImage = function (imageItem) {
   return currentImage;
 };
 
-// Массив картинок
-var createImageList = function (imageObjects) {
-  imagesList = [];
-  imageObjects.forEach(function (item, i) {
-    imagesList[i] = renderImage(imageObjects[i]);
-  });
-  return imagesList;
-};
-
 // Отрисовка изобржений на странице
-var renderImages = function (imagesObjectList) {
+var renderImages = function (imageObjects) {
+  var imageList = document.querySelector('.pictures');
   var fragment = document.createDocumentFragment();
-  imagesObjectList.forEach(function (item, i) {
-    fragment.appendChild(imagesObjectList[i]);
+  imageObjects.forEach(function (item) {
+    fragment.appendChild(renderImage(item));
   });
   imageList.appendChild(fragment);
 };
 
-renderImages(createImageList(images));
+renderImages(images);
