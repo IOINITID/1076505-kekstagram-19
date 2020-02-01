@@ -90,7 +90,7 @@ renderImages(imageItems);
 
 // Раздел с интерактивными изображениями
 // Показывает большое изображение
-var showBigImage = function (itemObjects) {
+var showBigImage = function (itemObject) {
   var bigImageModal = document.querySelector('.big-picture');
   var bigImage = bigImageModal.querySelector('.big-picture__img img');
   var bigImageLikes = bigImageModal.querySelector('.likes-count');
@@ -99,16 +99,17 @@ var showBigImage = function (itemObjects) {
   var counterComment = bigImageModal.querySelector('.social__comment-count');
   var commentsLoader = bigImageModal.querySelector('.comments-loader');
   bigImageModal.classList.remove('hidden');
-  bigImage.src = itemObjects[0].url;
-  bigImageLikes.textContent = itemObjects[0].likes;
-  bigImageComments.textContent = itemObjects[0].comments.length;
-  renderComments(itemObjects[0]);
-  bigImageSocialCaption.textContent = itemObjects[0].description;
+  bigImage.src = itemObject.url;
+  bigImageLikes.textContent = itemObject.likes;
+  bigImageComments.textContent = itemObject.comments.length;
+  renderComments(itemObject);
+  bigImageSocialCaption.textContent = itemObject.description;
   counterComment.classList.add('hidden');
   commentsLoader.classList.add('hidden');
   document.body.classList.add('modal-open');
 };
 
+// Отрисовка комментария
 var renderComment = function (commentObjectItem) {
   var commentItem = document.querySelector('.social__comment');
   var currentCommentItem = commentItem.cloneNode(true);
@@ -118,13 +119,23 @@ var renderComment = function (commentObjectItem) {
   return currentCommentItem;
 };
 
+// Удаление имеющихся комментариев
+var deleteComments = function () {
+  var commentsItem = document.querySelectorAll('.social__comment');
+  commentsItem.forEach(function (item) {
+    item.remove();
+  });
+};
+
+// Отрисовка комментариев
 var renderComments = function (imagesObjectsList) {
   var bigImageSocialComments = document.querySelector('.social__comments');
   var fragment = document.createDocumentFragment();
   imagesObjectsList.comments.forEach(function (item) {
     fragment.appendChild(renderComment(item));
   });
+  deleteComments();
   bigImageSocialComments.appendChild(fragment);
 };
 
-showBigImage(imageItems);
+showBigImage(imageItems[0]);
