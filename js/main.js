@@ -87,3 +87,44 @@ var renderImages = function (imageObjects) {
 
 var imageItems = createImagesDescription(QUANTITY_OF_IMAGES);
 renderImages(imageItems);
+
+// Раздел с интерактивными изображениями
+// Показывает большое изображение
+var showBigImage = function (itemObjects) {
+  var bigImageModal = document.querySelector('.big-picture');
+  var bigImage = bigImageModal.querySelector('.big-picture__img img');
+  var bigImageLikes = bigImageModal.querySelector('.likes-count');
+  var bigImageComments = bigImageModal.querySelector('.comments-count');
+  var bigImageSocialCaption = bigImageModal.querySelector('.social__caption');
+  var counterComment = bigImageModal.querySelector('.social__comment-count');
+  var commentsLoader = bigImageModal.querySelector('.comments-loader');
+  bigImageModal.classList.remove('hidden');
+  bigImage.src = itemObjects[0].url;
+  bigImageLikes.textContent = itemObjects[0].likes;
+  bigImageComments.textContent = itemObjects[0].comments.length;
+  renderComments(itemObjects[0]);
+  bigImageSocialCaption.textContent = itemObjects[0].description;
+  counterComment.classList.add('hidden');
+  commentsLoader.classList.add('hidden');
+  document.body.classList.add('modal-open');
+};
+
+var renderComment = function (commentObjectItem) {
+  var commentItem = document.querySelector('.social__comment');
+  var currentCommentItem = commentItem.cloneNode(true);
+  currentCommentItem.querySelector('.social__picture').src = commentObjectItem.avatar;
+  currentCommentItem.querySelector('.social__picture').alt = commentObjectItem.name;
+  currentCommentItem.querySelector('.social__text').textContent = commentObjectItem.message;
+  return currentCommentItem;
+};
+
+var renderComments = function (imagesObjectsList) {
+  var bigImageSocialComments = document.querySelector('.social__comments');
+  var fragment = document.createDocumentFragment();
+  imagesObjectsList.comments.forEach(function (item) {
+    fragment.appendChild(renderComment(item));
+  });
+  bigImageSocialComments.appendChild(fragment);
+};
+
+showBigImage(imageItems);
