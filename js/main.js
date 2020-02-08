@@ -4,7 +4,6 @@
 var QUANTITY_OF_IMAGES = 25;
 var ENTER_KEY = 'Enter';
 var ESC_KEY = 'Escape';
-var HASHTAG_PATTERN = /#[a-zA-z0-9]+$/gi;
 
 // Получение случайного числа (утилитная функция)
 var getRandomNumber = function (number) {
@@ -316,51 +315,44 @@ effectLevelPin.addEventListener('mouseup', function () {
 });
 
 // Валидация хештегов
-var textHashtags = document.querySelector('.text__hashtags');
-var uploadSubmitButton = document.querySelector('.img-upload__submit');
-
-// Получаем хештеги
-var getTextHashtagsValues = function () {
-  var textHashtagsValues = [];
-  textHashtagsValues = textHashtags.value.split(' ');
-  return textHashtagsValues;
+var HASHTAG_SYMBOL = '#';
+var HASHTAG_MAX_LENGTH = 20;
+var HASHTAG_MAX_QUANITY = 5;
+var HASHTAG_PATTERN = /^#[\w\dа-яА-Я]+$/;
+var HASHTAG_VALIDATE_ERRORS = {
+  firstSymbol: 'Хэштег должен начинаться с символа "#".',
+  symbolsLength: 'Доступное количество символов 20.',
+  onlyHashtag: 'Хештег не может состоять только из символа "#".',
+  toMuchHashtags: 'Максимальное количество хештегов равно ' + HASHTAG_MAX_QUANITY + '.',
+  onlyUniqueHashtags: 'Повторяющиеся хештеги не допустимы.',
+  invalidSymbols: 'Допустим ввод только букв и цифр.'
 };
+var hashtagsField = document.querySelector('.text__hashtags');
 
-// Валидация по допустимым символам строки
-var symbolsValidation = function (elementItem, arrayEl) {
-  if (HASHTAG_PATTERN.test(elementItem) === false) {
-    textHashtags.setCustomValidity('Строка должна состоять только из букв или чисел. Другие символы недопустимы.');
-  } else {
-    textHashtags.setCustomValidity('');
-  }
-  if (elementItem[0] !== '#' || elementItem === '#') {
-    textHashtags.setCustomValidity('Хэштег должен начинаться с символа # и не может состоять только из него.');
-  }
-  if (arrayEl[0] === elementItem && arrayEl.length !== 1) {
-    textHashtags.setCustomValidity('Хэштеги должны быть уникальны.');
-  }
-  if (elementItem.length > 20) {
-    textHashtags.setCustomValidity('Максимальная длина 20 символов.');
-  }
-  if (textHashtags.value === '') {
-    textHashtags.setCustomValidity('');
-  }
-};
-
-// Валидация хештегов
-var hashtagValidate = function (hashtagsItems) {
-  if (hashtagsItems.length <= 5) {
-    textHashtags.setCustomValidity('');
-    hashtagsItems.forEach(function (item) {
-      symbolsValidation(item, hashtagsItems);
-    });
-  } else {
-    textHashtags.setCustomValidity('Количество хештегов должно быть не более 5.');
-  }
-};
-
-// Валидация в процессе ввода данных
-uploadSubmitButton.addEventListener('click', function () {
-  var hashtagsArray = getTextHashtagsValues();
-  hashtagValidate(hashtagsArray);
+hashtagsField.addEventListener('input', function () {
+  hashtagValidate(hashtagsField);
 });
+
+var hashtagValidate = function (hashtagsItem) {
+  var error = '';
+  var hashtagsString = hashtagsItem.value.toLocaleLowerCase();
+  var hashtagsElements = hashtagsString.split(' ');
+
+  hashtagsElements.forEach(function (item, i) {
+    if (item[0] !== HASHTAG_SYMBOL) {
+      error = HASHTAG_VALIDATE_ERRORS.firstSymbol;
+    } else if (item.length > HASHTAG_MAX_LENGTH) {
+      error = HASHTAG_VALIDATE_ERRORS.symbolsLength;
+    } else if (item === HASHTAG_SYMBOL) {
+      error = HASHTAG_VALIDATE_ERRORS.onlyHashtag;
+    } else if (hashtagsElements.length > HASHTAG_MAX_QUANITY) {
+      error = HASHTAG_VALIDATE_ERRORS.toMuchHashtags;
+    } else if (hashtagsElements[0] === hashtagsElements[i + 1]) {
+      error = HASHTAG_VALIDATE_ERRORS.onlyUniqueHashtags;
+    } else if (HASHTAG_PATTERN.test(item) === false) {
+      error = HASHTAG_VALIDATE_ERRORS.invalidSymbols;
+    }
+  });
+
+  hashtagsItem.setCustomValidity(error);
+};
