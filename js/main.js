@@ -142,7 +142,6 @@ renderImages(imageItems);
 
 // showBigImage(imageItems[0]);
 
-var uploadImageForm = document.querySelector('.img-upload__form');
 var uploadOverlay = document.querySelector('.img-upload__overlay');
 var uploadField = document.querySelector('#upload-file');
 var uploadCloseButton = document.querySelector('.img-upload__cancel');
@@ -150,6 +149,7 @@ var scaleControlSmaller = document.querySelector('.scale__control--smaller');
 var scaleControlBigger = document.querySelector('.scale__control--bigger');
 var scaleControlValue = document.querySelector('.scale__control--value');
 var uploadImagePreview = document.querySelector('.img-upload__preview img');
+var uploadImageScaleFieldset = document.querySelector('.img-upload__scale');
 
 // Показ формы редактирования изображения
 var onUploadFieldChange = function () {
@@ -160,7 +160,7 @@ var onUploadFieldChange = function () {
   uploadImagePreview.className = '';
   effectsSlider.style.display = 'none';
   uploadImagePreview.style.filter = '';
-  uploadImageForm.addEventListener('keydown', onEscapeButtonPress);
+  document.addEventListener('keydown', onEscapeButtonPress);
 };
 
 // Закрытие формы редактирования изображения
@@ -168,7 +168,7 @@ var onUploadCloseButtonClick = function () {
   uploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   scaleControlValue.value = '100%';
-  uploadImageForm.removeEventListener('keydown', onEscapeButtonPress);
+  document.removeEventListener('keydown', onEscapeButtonPress);
 };
 
 // Нажатие на кнопку Enter
@@ -185,63 +185,52 @@ var onEscapeButtonPress = function (evt) {
     document.body.classList.remove('modal-open');
     scaleControlValue.value = '100%';
     uploadField.value = '';
-    uploadImageForm.removeEventListener('keydown', onEscapeButtonPress);
+    document.removeEventListener('keydown', onEscapeButtonPress);
   }
 };
 
 var onImageScaleButtonClick = function (evt) {
+  var SCALE_MIN_VALUE = 25;
+  var SCALE_MAX_VALUE = 100;
   var scaleControlValueItem = parseInt(scaleControlValue.value, 10);
-  if (evt.target === scaleControlSmaller) {
-    if (scaleControlValueItem >= 50) {
-      scaleControlValue.value = (scaleControlValueItem - 25) + '%';
-      uploadImagePreview.style.transform = 'scale(' + (scaleControlValueItem - 25) / 100 + ')';
-    } else {
-      scaleControlValue.value = '25%';
-      uploadImagePreview.style.transform = 'scale(0.25)';
-    }
-  } else if (evt.target === scaleControlBigger) {
-    if (scaleControlValueItem <= 75) {
-      scaleControlValue.value = (scaleControlValueItem + 25) + '%';
-      uploadImagePreview.style.transform = 'scale(' + (scaleControlValueItem + 25) / 100 + ')';
-    } else {
-      scaleControlValue.value = '100%';
-      uploadImagePreview.style.transform = 'scale(1)';
-    }
+  var scaleValue;
+  if (evt.target === scaleControlSmaller && scaleControlValueItem !== SCALE_MIN_VALUE) {
+    scaleControlValue.value = (scaleControlValueItem - 25) + '%';
+    scaleValue = 'scale(' + (scaleControlValueItem - 25) / 100 + ')';
+  } else if (evt.target === scaleControlBigger && scaleControlValueItem !== SCALE_MAX_VALUE) {
+    scaleControlValue.value = (scaleControlValueItem + 25) + '%';
+    scaleValue = 'scale(' + (scaleControlValueItem + 25) / 100 + ')';
   }
+  uploadImagePreview.style.transform = scaleValue;
 };
 
 uploadField.addEventListener('change', onUploadFieldChange);
 uploadCloseButton.addEventListener('click', onUploadCloseButtonClick);
 uploadCloseButton.addEventListener('keydown', onEnterButtonPress);
-document.addEventListener('click', onImageScaleButtonClick);
+uploadImageScaleFieldset.addEventListener('click', onImageScaleButtonClick);
 
 // Эффекты изображения
 var effectsSlider = document.querySelector('.img-upload__effect-level');
 var effectsList = document.querySelector('.effects__list');
 
-effectsList.addEventListener('click', function (evt) {
-  var radioButtons = document.querySelectorAll('.effects__radio');
-  radioButtons.forEach(function (item) {
-    if (evt.target.value === 'none' && evt.target === item) {
-      uploadImagePreview.className = '';
-      effectsSlider.style.display = 'none';
-      uploadImagePreview.style.filter = '';
-    } else if (evt.target === item) {
-      uploadImagePreview.className = 'effects__preview--' + evt.target.value;
-      effectsSlider.style.display = 'block';
-      uploadImagePreview.style.filter = '';
-    }
-  });
+effectsList.addEventListener('change', function (evt) {
+  if (evt.target.value === 'none') {
+    uploadImagePreview.className = '';
+    effectsSlider.style.display = 'none';
+  } else {
+    uploadImagePreview.className = 'effects__preview--' + evt.target.value;
+    effectsSlider.style.display = 'block';
+  }
+  uploadImagePreview.style.filter = '';
 });
 
 // Значение фильтра слайдера
 var effectLevelPin = document.querySelector('.effect-level__pin');
 var effectLevelValue = document.querySelector('.effect-level__value');
 var effectLevelLine = document.querySelector('.effect-level__line');
-var effectLevelDepth = document.querySelector('.effect-level__depth');
 
 var getEffectLevelValue = function () {
-  return Math.round(effectLevelDepth.clientWidth / effectLevelLine.clientWidth * 100);
+  return Math.round(effectLevelPin.offsetLeft / effectLevelLine.offsetWidth * 100);
 };
 
 effectLevelPin.addEventListener('mouseup', function () {
