@@ -148,7 +148,7 @@ var previewModal = document.querySelector('.big-picture');
 var pictureItem = document.querySelectorAll('.picture');
 
 // Закрытие окна превью картинки
-var onClosePreviewButtonClick = function (evt) {
+var onClosePreviewButtonClick = function () {
   previewModal.classList.add('hidden');
   document.body.classList.remove('modal-open');
 };
@@ -162,18 +162,9 @@ var onPreviewEscapeButtonPress = function (evt) {
   }
 };
 
-// Нажатие на Enter
-var onPreviewEnterButtonPress = function (evt) {
-  if (evt.key === ENTER_KEY) {
-    previewModal.classList.add('hidden');
-    document.body.classList.remove('modal-open');
-    document.removeEventListener('keydown', onPreviewEnterButtonPress);
-  }
-};
-
 // Открытие превью картинки
 pictureItem.forEach(function (item, i) {
-  item.addEventListener('click', function (evt) {
+  item.addEventListener('click', function () {
     showBigImage(imageItems[i]);
     document.addEventListener('keydown', onPreviewEscapeButtonPress);
   });
@@ -185,8 +176,6 @@ pictureItem.forEach(function (item, i) {
 });
 
 closePreviewButton.addEventListener('click', onClosePreviewButtonClick);
-
-
 
 var uploadOverlay = document.querySelector('.img-upload__overlay');
 var uploadField = document.querySelector('#upload-file');
