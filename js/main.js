@@ -151,20 +151,21 @@ var renderComments = function (imagesObjectsList) {
 // Раздел с показам превью картинок
 var closePreviewButton = document.querySelector('.big-picture__cancel');
 var previewModal = document.querySelector('.big-picture');
-
-// Закрытие окна превью картинки
-var onClosePreviewButtonClick = function () {
+var closeOverlay = function () {
   previewModal.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onPreviewEscapeButtonPress);
 };
 
+// Закрытие окна превью картинки
+var onClosePreviewButtonClick = function () {
+  closeOverlay();
+};
+
 // Нажатие на Esc
 var onPreviewEscapeButtonPress = function (evt) {
   if (evt.key === ESC_KEY) {
-    previewModal.classList.add('hidden');
-    document.body.classList.remove('modal-open');
-    document.removeEventListener('keydown', onPreviewEscapeButtonPress);
+    closeOverlay();
   }
 };
 
