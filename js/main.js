@@ -70,10 +70,16 @@ var createImagesDescription = function (quantityOfImagesDescription) {
 var renderImage = function (imageItem) {
   var template = document.querySelector('#picture').content;
   var currentImage = template.cloneNode(true);
+  var onImageClick = function (evt) {
+    evt.preventDefault();
+    showBigImage(imageItem);
+    document.addEventListener('keydown', onPreviewEscapeButtonPress);
+  };
   currentImage.querySelector('.picture__img').src = imageItem.url;
   currentImage.querySelector('.picture__img').alt = imageItem.description;
   currentImage.querySelector('.picture__likes').textContent = imageItem.likes;
   currentImage.querySelector('.picture__comments').textContent = imageItem.comments.length;
+  currentImage.querySelector('.picture').addEventListener('click', onImageClick);
   return currentImage;
 };
 
@@ -145,12 +151,12 @@ var renderComments = function (imagesObjectsList) {
 // Раздел с показам превью картинок
 var closePreviewButton = document.querySelector('.big-picture__cancel');
 var previewModal = document.querySelector('.big-picture');
-var pictureItem = document.querySelectorAll('.picture');
 
 // Закрытие окна превью картинки
 var onClosePreviewButtonClick = function () {
   previewModal.classList.add('hidden');
   document.body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onPreviewEscapeButtonPress);
 };
 
 // Нажатие на Esc
@@ -161,19 +167,6 @@ var onPreviewEscapeButtonPress = function (evt) {
     document.removeEventListener('keydown', onPreviewEscapeButtonPress);
   }
 };
-
-// Открытие превью картинки
-pictureItem.forEach(function (item, i) {
-  item.addEventListener('click', function () {
-    showBigImage(imageItems[i]);
-    document.addEventListener('keydown', onPreviewEscapeButtonPress);
-  });
-  item.addEventListener('keydown', function (evt) {
-    if (evt.key === ENTER_KEY) {
-      showBigImage(imageItems[i]);
-    }
-  });
-});
 
 closePreviewButton.addEventListener('click', onClosePreviewButtonClick);
 
