@@ -2,6 +2,20 @@
 
 // Валидация хештегов
 (function () {
+  var HASHTAG_SYMBOL = '#';
+  var HASHTAG_MAX_LENGTH = 20;
+  var HASHTAG_MAX_QUANITY = 5;
+  var HASHTAG_PATTERN = /^#[\w\dа-яА-Я]+$/;
+  var HASHTAG_VALIDATE_ERRORS = {
+    firstSymbol: 'Хэштег должен начинаться с символа "#".',
+    symbolsLength: 'Доступное количество символов 20.',
+    onlyHashtag: 'Хештег не может состоять только из символа "#".',
+    toMuchHashtags: 'Максимальное количество хештегов равно ' + HASHTAG_MAX_QUANITY + '.',
+    onlyUniqueHashtags: 'Повторяющиеся хештеги не допустимы.',
+    invalidSymbols: 'Допустим ввод только букв и цифр.'
+  };
+  var hashtagsField = document.querySelector('.text__hashtags');
+  var commentField = document.querySelector('.text__description');
   var uploadOverlay = document.querySelector('.img-upload__overlay');
   var uploadField = document.querySelector('#upload-file');
   var uploadCloseButton = document.querySelector('.img-upload__cancel');
@@ -10,6 +24,11 @@
   var scaleControlValue = document.querySelector('.scale__control--value');
   var uploadImagePreview = document.querySelector('.img-upload__preview img');
   var uploadImageScaleFieldset = document.querySelector('.img-upload__scale');
+  var effectsSlider = document.querySelector('.img-upload__effect-level');
+  var effectsList = document.querySelector('.effects__list');
+  var effectLevelPin = document.querySelector('.effect-level__pin');
+  var effectLevelValue = document.querySelector('.effect-level__value');
+  var effectLevelLine = document.querySelector('.effect-level__line');
 
   // Показ формы редактирования изображения
   var onUploadFieldChange = function () {
@@ -23,9 +42,9 @@
     document.addEventListener('keydown', onEscapeButtonPress);
   };
 
-   // Нажатие на кнопку Enter
-   var onEnterButtonPress = function (evt) {
-    if (evt.key === ENTER_KEY) {
+  // Нажатие на кнопку Enter
+  var onEnterButtonPress = function (evt) {
+    if (evt.key === window.data.ENTER_KEY) {
       uploadOverlay.classList.add('hidden');
     }
   };
@@ -40,7 +59,7 @@
 
   // Нажатие на кнопку Escape
   var onEscapeButtonPress = function (evt) {
-    if (evt.key === ESC_KEY && evt.target !== hashtagsField && evt.target !== commentField) {
+    if (evt.key === window.data.ESC_KEY && evt.target !== hashtagsField && evt.target !== commentField) {
       uploadOverlay.classList.add('hidden');
       document.body.classList.remove('modal-open');
       scaleControlValue.value = '100%';
@@ -69,10 +88,6 @@
   uploadCloseButton.addEventListener('keydown', onEnterButtonPress);
   uploadImageScaleFieldset.addEventListener('click', onImageScaleButtonClick);
 
-  // Эффекты изображения
-  var effectsSlider = document.querySelector('.img-upload__effect-level');
-  var effectsList = document.querySelector('.effects__list');
-
   effectsList.addEventListener('change', function (evt) {
     if (evt.target.value === 'none') {
       uploadImagePreview.className = '';
@@ -83,11 +98,6 @@
     }
     uploadImagePreview.style.filter = '';
   });
-
-  // Значение фильтра слайдера
-  var effectLevelPin = document.querySelector('.effect-level__pin');
-  var effectLevelValue = document.querySelector('.effect-level__value');
-  var effectLevelLine = document.querySelector('.effect-level__line');
 
   var getEffectLevelValue = function () {
     return Math.round(effectLevelPin.offsetLeft / effectLevelLine.offsetWidth * 100);
@@ -121,20 +131,6 @@
     effectLevelValue.value = getEffectLevelValue();
   });
 
-  var HASHTAG_SYMBOL = '#';
-  var HASHTAG_MAX_LENGTH = 20;
-  var HASHTAG_MAX_QUANITY = 5;
-  var HASHTAG_PATTERN = /^#[\w\dа-яА-Я]+$/;
-  var HASHTAG_VALIDATE_ERRORS = {
-    firstSymbol: 'Хэштег должен начинаться с символа "#".',
-    symbolsLength: 'Доступное количество символов 20.',
-    onlyHashtag: 'Хештег не может состоять только из символа "#".',
-    toMuchHashtags: 'Максимальное количество хештегов равно ' + HASHTAG_MAX_QUANITY + '.',
-    onlyUniqueHashtags: 'Повторяющиеся хештеги не допустимы.',
-    invalidSymbols: 'Допустим ввод только букв и цифр.'
-  };
-  var hashtagsField = document.querySelector('.text__hashtags');
-  var commentField = document.querySelector('.text__description');
   // Получение количества уникальных елементов
   var getUniqueItems = function (elements) {
     var currentElements = [];
@@ -145,6 +141,7 @@
     });
     return currentElements;
   };
+
   // Валидация поля с хештегами
   var hashtagValidate = function (hashtagsItem) {
     var error = '';
@@ -167,6 +164,7 @@
     });
     hashtagsItem.setCustomValidity(error);
   };
+
   // Валидация комментария
   var commentValidate = function (commentItem) {
     if (commentItem.value.length > 140) {
@@ -175,9 +173,11 @@
       commentItem.setCustomValidity('');
     }
   };
+
   hashtagsField.addEventListener('input', function () {
     hashtagValidate(hashtagsField);
   });
+
   commentField.addEventListener('input', function () {
     commentValidate(commentField);
   });

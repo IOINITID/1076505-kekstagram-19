@@ -66,36 +66,16 @@
 
   // Нажатие на Esc
   var onPreviewEscapeButtonPress = function (evt) {
-    if (evt.key === ESC_KEY) {
+    if (evt.key === window.data.ESC_KEY) {
       closeOverlay();
     }
   };
 
   closePreviewButton.addEventListener('click', onClosePreviewButtonClick);
 
+  // Экспорт в глобальную область
   window.preview = {
-    showBigImage: function (itemObject) {
-      var bigImageModal = document.querySelector('.big-picture');
-      var bigImage = bigImageModal.querySelector('.big-picture__img img');
-      var bigImageLikes = bigImageModal.querySelector('.likes-count');
-      var bigImageComments = bigImageModal.querySelector('.comments-count');
-      var bigImageSocialCaption = bigImageModal.querySelector('.social__caption');
-      var counterComment = bigImageModal.querySelector('.social__comment-count');
-      var commentsLoader = bigImageModal.querySelector('.comments-loader');
-      bigImageModal.classList.remove('hidden');
-      bigImage.src = itemObject.url;
-      bigImageLikes.textContent = itemObject.likes;
-      bigImageComments.textContent = itemObject.comments.length;
-      renderComments(itemObject);
-      bigImageSocialCaption.textContent = itemObject.description;
-      counterComment.classList.add('hidden');
-      commentsLoader.classList.add('hidden');
-      document.body.classList.add('modal-open');
-    },
-    onPreviewEscapeButtonPress: function (evt) {
-      if (evt.key === ESC_KEY) {
-        closeOverlay();
-      }
-    },
-  }
+    showBigImage: showBigImage,
+    onPreviewEscapeButtonPress: onPreviewEscapeButtonPress,
+  };
 })();
