@@ -8,7 +8,7 @@
     var onImageClick = function (evt) {
       evt.preventDefault();
       window.preview.showBigImage(imageItem);
-      document.addEventListener('keydown', window.preview.onPreviewEscapeButtonPress);
+      document.addEventListener('keydown', window.preview.onEscapeButtonPress);
     };
     currentImage.querySelector('.picture__img').src = imageItem.url;
     currentImage.querySelector('.picture__img').alt = imageItem.description;

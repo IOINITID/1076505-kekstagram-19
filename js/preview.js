@@ -56,7 +56,7 @@
   var closeOverlay = function () {
     previewModal.classList.add('hidden');
     document.body.classList.remove('modal-open');
-    document.removeEventListener('keydown', onPreviewEscapeButtonPress);
+    document.removeEventListener('keydown', onEscapeButtonPress);
   };
 
   // Закрытие окна превью картинки
@@ -65,7 +65,7 @@
   };
 
   // Нажатие на Esc
-  var onPreviewEscapeButtonPress = function (evt) {
+  var onEscapeButtonPress = function (evt) {
     if (evt.key === window.data.ESC_KEY) {
       closeOverlay();
     }
@@ -76,6 +76,6 @@
   // Экспорт в глобальную область
   window.preview = {
     showBigImage: showBigImage,
-    onPreviewEscapeButtonPress: onPreviewEscapeButtonPress,
+    onEscapeButtonPress: onEscapeButtonPress,
   };
 })();
