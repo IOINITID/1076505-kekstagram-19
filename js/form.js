@@ -95,6 +95,11 @@
     } else {
       uploadImagePreview.className = 'effects__preview--' + evt.target.value;
       effectsSlider.style.display = 'block';
+
+      effectLevelValue.value = 100;
+      effectLevelDepth.style.width = '100%';
+      effectLevelPin.style.left = effectLevelLine.clientWidth + 'px';
+
     }
     uploadImagePreview.style.filter = '';
   });
@@ -103,7 +108,7 @@
     return Math.round(effectLevelPin.offsetLeft / effectLevelLine.offsetWidth * 100);
   };
 
-  effectLevelPin.addEventListener('mouseup', function () {
+  var onEffectPinMouseUp = function () {
     var effectItem = uploadImagePreview.getAttribute('class');
     switch (effectItem) {
       case 'effects__preview--none':
@@ -129,7 +134,9 @@
         break;
     }
     effectLevelValue.value = getEffectLevelValue();
-  });
+  };
+
+  effectLevelPin.addEventListener('mouseup', onEffectPinMouseUp);
 
   // Получение количества уникальных елементов
   var getUniqueItems = function (elements) {
@@ -181,4 +188,51 @@
   commentField.addEventListener('input', function () {
     commentValidate(commentField);
   });
+
+  // Effect pin dragg event
+  var effectLevelDepth = document.querySelector('.effect-level__depth');
+
+  effectLevelPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+      };
+
+      var effectLevelPinPosition = effectLevelPin.offsetLeft - shift.x;
+
+      if (effectLevelPinPosition >= 0 && effectLevelPinPosition <= effectLevelLine.clientWidth) {
+        effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift.x) + 'px';
+        effectLevelValue.value = getEffectLevelValue();
+        effectLevelDepth.style.width = getEffectLevelValue() + '%';
+      }
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+
+      if (upEvt.target !== effectLevelPin) {
+        document.addEventListener('mouseup', onEffectPinMouseUp);
+        document.addEventListener('mousemove', onEffectPinMouseUp);
+      }
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
+
 })();
