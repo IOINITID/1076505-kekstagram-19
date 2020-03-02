@@ -95,6 +95,11 @@
     } else {
       uploadImagePreview.className = 'effects__preview--' + evt.target.value;
       effectsSlider.style.display = 'block';
+
+      effectLevelValue.value = 100;
+      effectLevelDepth.style.width = '100%';
+      effectLevelPin.style.left = effectLevelLine.clientWidth + 'px';
+
     }
     uploadImagePreview.style.filter = '';
   });
@@ -221,7 +226,8 @@
       document.removeEventListener('mouseup', onMouseUp);
 
       if (upEvt.target !== effectLevelPin) {
-        onEffectPinMouseUp();
+        document.addEventListener('mouseup', onEffectPinMouseUp);
+        document.addEventListener('mousemove', onEffectPinMouseUp);
       }
     };
 
