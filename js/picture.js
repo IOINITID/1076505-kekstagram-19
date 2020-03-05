@@ -28,7 +28,13 @@
     imageList.appendChild(fragment);
   };
 
-  var imageItems = window.gallery.createImagesDescription(window.data.QUANTITY_OF_IMAGES);
+  // var imageItems = window.gallery.createImagesDescription(window.data.QUANTITY_OF_IMAGES);
 
-  renderImages(imageItems);
+  // renderImages(imageItems);
+
+  var onSuccessLoad = function (response) {
+    renderImages(response);
+  };
+
+  window.backend.load(onSuccessLoad, window.data.onRequestError);
 })();
