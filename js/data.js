@@ -22,6 +22,18 @@
     return elementList[getRandomNumber(elementList.length - 1)];
   };
 
+  // Ошибка выполнения запроса
+  var onRequestError = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
   // Экспорт в глобальную область
   window.data = {
     ESC_KEY: ESC_KEY,
@@ -30,5 +42,6 @@
     getRandomNumber: getRandomNumber,
     getRandomNumberFromTo: getRandomNumberFromTo,
     getRandomElement: getRandomElement,
+    onRequestError: onRequestError,
   };
 })();

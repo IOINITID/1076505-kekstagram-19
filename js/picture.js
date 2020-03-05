@@ -19,7 +19,20 @@
   };
 
   // Отрисовка изобржений на странице
-  var renderImages = function (imageObjects) {
+  // var renderImages = function (imageObjects) {
+  //   var imageList = document.querySelector('.pictures');
+  //   var fragment = document.createDocumentFragment();
+  //   imageObjects.forEach(function (item) {
+  //     fragment.appendChild(renderImage(item));
+  //   });
+  //   imageList.appendChild(fragment);
+  // };
+
+  // var imageItems = window.gallery.createImagesDescription(window.data.QUANTITY_OF_IMAGES);
+
+  // renderImages(imageItems);
+
+  var onSuccessLoad = function (imageObjects) {
     var imageList = document.querySelector('.pictures');
     var fragment = document.createDocumentFragment();
     imageObjects.forEach(function (item) {
@@ -28,7 +41,5 @@
     imageList.appendChild(fragment);
   };
 
-  var imageItems = window.gallery.createImagesDescription(window.data.QUANTITY_OF_IMAGES);
-
-  renderImages(imageItems);
+  window.backend.load(onSuccessLoad, window.data.onRequestError);
 })();
