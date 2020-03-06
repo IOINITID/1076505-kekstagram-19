@@ -307,6 +307,7 @@
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
+    scaleControlValue.value = parseInt(scaleControlValue.value, 10);
     window.backend.save(new FormData(form), function () {
       closeUploadModal();
       onSuccessUpload();
