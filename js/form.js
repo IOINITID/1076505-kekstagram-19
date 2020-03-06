@@ -49,22 +49,34 @@
     }
   };
 
-  // Закрытие формы редактирования изображения
-  var onUploadCloseButtonClick = function () {
+  var closeUploadModal = function () {
     uploadOverlay.classList.add('hidden');
     document.body.classList.remove('modal-open');
     scaleControlValue.value = '100%';
+    uploadField.value = '';
     document.removeEventListener('keydown', onEscapeButtonPress);
+    hashtagsField.value = '';
+    commentField.value = '';
+  };
+
+  // Закрытие формы редактирования изображения
+  var onUploadCloseButtonClick = function () {
+    // uploadOverlay.classList.add('hidden');
+    // document.body.classList.remove('modal-open');
+    // scaleControlValue.value = '100%';
+    // document.removeEventListener('keydown', onEscapeButtonPress);
+    closeUploadModal();
   };
 
   // Нажатие на кнопку Escape
   var onEscapeButtonPress = function (evt) {
     if (evt.key === window.data.ESC_KEY && evt.target !== hashtagsField && evt.target !== commentField) {
-      uploadOverlay.classList.add('hidden');
-      document.body.classList.remove('modal-open');
-      scaleControlValue.value = '100%';
-      uploadField.value = '';
-      document.removeEventListener('keydown', onEscapeButtonPress);
+      // uploadOverlay.classList.add('hidden');
+      // document.body.classList.remove('modal-open');
+      // scaleControlValue.value = '100%';
+      // uploadField.value = '';
+      // document.removeEventListener('keydown', onEscapeButtonPress);
+      closeUploadModal();
     }
   };
 
@@ -233,6 +245,49 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+  });
+
+  // Form data upload
+  var form = document.querySelector('.img-upload__form');
+  var main = document.querySelector('main');
+
+  var onSuccessUpload = function () {
+    var successTemplate = document.querySelector('#success').content;
+    var success = successTemplate.cloneNode(true);
+    main.appendChild(success);
+    var successButton = document.querySelector('.success__button');
+    successButton.addEventListener('click', onSuccessButtonClick);
+  };
+
+  var onErrorUpload = function () {
+    var errorTemplate = document.querySelector('#error').content;
+    var error = errorTemplate.cloneNode(true);
+    main.appendChild(error);
+    var errorButton = document.querySelector('.error__button');
+    errorButton.addEventListener('click', onErrorButtonClick);
+  };
+
+  var onSuccessButtonClick = function (evt) {
+    evt.preventDefault();
+    var successElement = document.querySelector('.success');
+    successElement.remove();
+  };
+
+  var onErrorButtonClick = function (evt) {
+    evt.preventDefault();
+    var errorElement = document.querySelector('.error');
+    errorElement.remove();
+  };
+
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(form), function () {
+      closeUploadModal();
+      onSuccessUpload();
+    }, function () {
+      closeUploadModal();
+      onErrorUpload();
+    });
   });
 
 })();
