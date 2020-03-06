@@ -256,7 +256,26 @@
     var success = successTemplate.cloneNode(true);
     main.appendChild(success);
     var successButton = document.querySelector('.success__button');
-    successButton.addEventListener('click', onSuccessButtonClick);
+    var successElement = document.querySelector('.success');
+    successButton.addEventListener('click', onSuccessClose);
+    successElement.addEventListener('click', onSuccessClose);
+    document.addEventListener('keydown', onSuccessEscKeydown);
+  };
+
+  var onSuccessClose = function (evt) {
+    evt.preventDefault();
+    var successElement = document.querySelector('.success');
+    if (successElement) {
+      successElement.remove();
+    }
+  };
+
+  var onSuccessEscKeydown = function (evt) {
+    evt.preventDefault();
+    var successElement = document.querySelector('.success');
+    if (evt.key === window.data.ESC_KEY) {
+      successElement.remove();
+    }
   };
 
   var onErrorUpload = function () {
@@ -264,19 +283,26 @@
     var error = errorTemplate.cloneNode(true);
     main.appendChild(error);
     var errorButton = document.querySelector('.error__button');
-    errorButton.addEventListener('click', onErrorButtonClick);
+    var errorElement = document.querySelector('.error');
+    errorButton.addEventListener('click', onErrorClose);
+    errorElement.addEventListener('click', onErrorClose);
+    document.addEventListener('keydown', onErrorEscKeydown);
   };
 
-  var onSuccessButtonClick = function (evt) {
-    evt.preventDefault();
-    var successElement = document.querySelector('.success');
-    successElement.remove();
-  };
-
-  var onErrorButtonClick = function (evt) {
+  var onErrorClose = function (evt) {
     evt.preventDefault();
     var errorElement = document.querySelector('.error');
-    errorElement.remove();
+    if (errorElement) {
+      errorElement.remove();
+    }
+  };
+
+  var onErrorEscKeydown = function (evt) {
+    evt.preventDefault();
+    var errorElement = document.querySelector('.error');
+    if (evt.key === window.data.ESC_KEY) {
+      errorElement.remove();
+    }
   };
 
   form.addEventListener('submit', function (evt) {
