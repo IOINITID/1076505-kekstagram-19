@@ -251,19 +251,35 @@
   var form = document.querySelector('.img-upload__form');
   var main = document.querySelector('main');
 
+  // Обработчик успешной отправки формы
   var onSuccessUpload = function () {
     var successTemplate = document.querySelector('#success').content;
     var success = successTemplate.cloneNode(true);
     main.appendChild(success);
-    var successButton = document.querySelector('.success__button');
-    var successElement = document.querySelector('.success');
-    successButton.addEventListener('click', onSuccessClose);
-    successElement.addEventListener('click', onSuccessClose);
+    var successModal = document.querySelector('.success');
+    successModal.addEventListener('click', onSuccessModalClose);
     document.addEventListener('keydown', onSuccessEscKeydown);
   };
 
-  var onSuccessClose = function (evt) {
+  // Очищаю выбранные эффекты
+  var clearEffectsValue = function () {
+    var allEffects = document.querySelectorAll('.effects__radio');
+    allEffects.forEach(function (item) {
+      item.checked = 0;
+    });
+  };
+
+  // Устанавливаю эффект по умолчанию
+  var setEffectDefaultValue = function () {
+    var effectNone = document.querySelector('#effect-none');
+    effectNone.checked = 1;
+  };
+
+  // Обработчик закрытия сообщения об успешной отправке
+  var onSuccessModalClose = function (evt) {
     evt.preventDefault();
+    clearEffectsValue();
+    setEffectDefaultValue();
     var successElement = document.querySelector('.success');
     if (successElement) {
       successElement.remove();
@@ -271,25 +287,24 @@
   };
 
   var onSuccessEscKeydown = function (evt) {
-    evt.preventDefault();
     var successElement = document.querySelector('.success');
     if (evt.key === window.data.ESC_KEY) {
       successElement.remove();
     }
   };
 
+  // Обработчик не успешной отправки формы
   var onErrorUpload = function () {
     var errorTemplate = document.querySelector('#error').content;
     var error = errorTemplate.cloneNode(true);
     main.appendChild(error);
-    var errorButton = document.querySelector('.error__button');
-    var errorElement = document.querySelector('.error');
-    errorButton.addEventListener('click', onErrorClose);
-    errorElement.addEventListener('click', onErrorClose);
+    var errorModal = document.querySelector('.error');
+    errorModal.addEventListener('click', onErrorModalClose);
     document.addEventListener('keydown', onErrorEscKeydown);
   };
 
-  var onErrorClose = function (evt) {
+  // Обработчик закрытия сообщения о не успешной отправке
+  var onErrorModalClose = function (evt) {
     evt.preventDefault();
     var errorElement = document.querySelector('.error');
     if (errorElement) {
@@ -298,7 +313,6 @@
   };
 
   var onErrorEscKeydown = function (evt) {
-    evt.preventDefault();
     var errorElement = document.querySelector('.error');
     if (evt.key === window.data.ESC_KEY) {
       errorElement.remove();
