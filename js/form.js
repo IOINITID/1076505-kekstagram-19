@@ -290,6 +290,7 @@
     var successElement = document.querySelector('.success');
     if (evt.key === window.data.ESC_KEY) {
       successElement.remove();
+      document.removeEventListener('keydown', onSuccessEscKeydown);
     }
   };
 
@@ -316,6 +317,7 @@
     var errorElement = document.querySelector('.error');
     if (evt.key === window.data.ESC_KEY) {
       errorElement.remove();
+      document.removeEventListener('keydown', onErrorEscKeydown);
     }
   };
 
