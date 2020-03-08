@@ -49,22 +49,34 @@
     }
   };
 
-  // Закрытие формы редактирования изображения
-  var onUploadCloseButtonClick = function () {
+  var closeUploadModal = function () {
     uploadOverlay.classList.add('hidden');
     document.body.classList.remove('modal-open');
     scaleControlValue.value = '100%';
+    uploadField.value = '';
     document.removeEventListener('keydown', onEscapeButtonPress);
+    hashtagsField.value = '';
+    commentField.value = '';
+  };
+
+  // Закрытие формы редактирования изображения
+  var onUploadCloseButtonClick = function () {
+    // uploadOverlay.classList.add('hidden');
+    // document.body.classList.remove('modal-open');
+    // scaleControlValue.value = '100%';
+    // document.removeEventListener('keydown', onEscapeButtonPress);
+    closeUploadModal();
   };
 
   // Нажатие на кнопку Escape
   var onEscapeButtonPress = function (evt) {
     if (evt.key === window.data.ESC_KEY && evt.target !== hashtagsField && evt.target !== commentField) {
-      uploadOverlay.classList.add('hidden');
-      document.body.classList.remove('modal-open');
-      scaleControlValue.value = '100%';
-      uploadField.value = '';
-      document.removeEventListener('keydown', onEscapeButtonPress);
+      // uploadOverlay.classList.add('hidden');
+      // document.body.classList.remove('modal-open');
+      // scaleControlValue.value = '100%';
+      // uploadField.value = '';
+      // document.removeEventListener('keydown', onEscapeButtonPress);
+      closeUploadModal();
     }
   };
 
@@ -233,6 +245,92 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+  });
+
+  // Form data upload
+  var form = document.querySelector('.img-upload__form');
+  var main = document.querySelector('main');
+
+  // Обработчик успешной отправки формы
+  var onSuccessUpload = function () {
+    var successTemplate = document.querySelector('#success').content;
+    var success = successTemplate.cloneNode(true);
+    main.appendChild(success);
+    var successModal = document.querySelector('.success');
+    successModal.addEventListener('click', onSuccessModalClose);
+    document.addEventListener('keydown', onSuccessEscKeydown);
+  };
+
+  // Очищаю выбранные эффекты
+  var clearEffectsValue = function () {
+    var allEffects = document.querySelectorAll('.effects__radio');
+    allEffects.forEach(function (item) {
+      item.checked = 0;
+    });
+  };
+
+  // Устанавливаю эффект по умолчанию
+  var setEffectDefaultValue = function () {
+    var effectNone = document.querySelector('#effect-none');
+    effectNone.checked = 1;
+  };
+
+  // Обработчик закрытия сообщения об успешной отправке
+  var onSuccessModalClose = function (evt) {
+    evt.preventDefault();
+    clearEffectsValue();
+    setEffectDefaultValue();
+    var successElement = document.querySelector('.success');
+    if (successElement) {
+      successElement.remove();
+    }
+  };
+
+  var onSuccessEscKeydown = function (evt) {
+    var successElement = document.querySelector('.success');
+    if (evt.key === window.data.ESC_KEY) {
+      successElement.remove();
+      document.removeEventListener('keydown', onSuccessEscKeydown);
+    }
+  };
+
+  // Обработчик не успешной отправки формы
+  var onErrorUpload = function () {
+    var errorTemplate = document.querySelector('#error').content;
+    var error = errorTemplate.cloneNode(true);
+    main.appendChild(error);
+    var errorModal = document.querySelector('.error');
+    errorModal.addEventListener('click', onErrorModalClose);
+    document.addEventListener('keydown', onErrorEscKeydown);
+  };
+
+  // Обработчик закрытия сообщения о не успешной отправке
+  var onErrorModalClose = function (evt) {
+    evt.preventDefault();
+    var errorElement = document.querySelector('.error');
+    if (errorElement) {
+      errorElement.remove();
+    }
+  };
+
+  var onErrorEscKeydown = function (evt) {
+    var errorElement = document.querySelector('.error');
+    if (evt.key === window.data.ESC_KEY) {
+      errorElement.remove();
+      document.removeEventListener('keydown', onErrorEscKeydown);
+    }
+  };
+
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    scaleControlValue.value = parseInt(scaleControlValue.value, 10);
+    window.backend.save(new FormData(form), function () {
+      closeUploadModal();
+      onSuccessUpload();
+    }, function () {
+      closeUploadModal();
+      onErrorUpload();
+    });
   });
 
 })();
