@@ -32,8 +32,15 @@
 
   // renderImages(imageItems);
 
+  // Показывает окно с сортировкой
+  var showSortModal = function () {
+    var sortElement = document.querySelector('.img-filters');
+    sortElement.classList.remove('img-filters--inactive');
+  };
+
   var onSuccessLoad = function (response) {
     renderImages(response);
+    showSortModal();
   };
 
   window.backend.load(onSuccessLoad, window.data.onRequestError);
