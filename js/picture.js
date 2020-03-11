@@ -20,20 +20,6 @@
     return currentImage;
   };
 
-  // Отрисовка изобржений на странице
-  // var renderImages = function (imageObjects) {
-  //   var imageList = document.querySelector('.pictures');
-  //   var fragment = document.createDocumentFragment();
-  //   imageObjects.forEach(function (item) {
-  //     fragment.appendChild(renderImage(item));
-  //   });
-  //   imageList.appendChild(fragment);
-  // };
-
-  // var imageItems = window.gallery.createImagesDescription(window.data.QUANTITY_OF_IMAGES);
-
-  // renderImages(imageItems);
-
   // Очищает все изображения
   var clearImages = function () {
     var pictures = document.querySelectorAll('.picture');
