@@ -98,6 +98,12 @@
   };
 
   // Сортировка по умолчанию
+  var onSuccessLoad = function (response) {
+    renderAllImages(response);
+    showSortModal();
+  };
+
+  // Сортировка по умолчанию
   var onDefaultSuccessLoad = function (response) {
     // renderAllImages(response);
     debouncedDefaultUpdate(response);
@@ -165,5 +171,5 @@
   discussedSortButton.addEventListener('click', onDiscussedSortButtonClick);
 
   // window.backend.load(onSuccessLoad, window.data.onRequestError);
-  window.backend.load(onDefaultSuccessLoad, window.data.onRequestError);
+  window.backend.load(onSuccessLoad, window.data.onRequestError);
 })();
