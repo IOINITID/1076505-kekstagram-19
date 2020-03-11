@@ -92,66 +92,67 @@
   var onSuccessLoad = function (response) {
     renderImages(response);
     showSortModal();
+
+    // Сортировка по умолчанию
+    var onDefaultSuccessLoad = function () {
+      debouncedUpdate(response);
+    };
+
+    // Сортировка 10 случайных не повторяющихся изображений
+    var onRandomSuccessLoad = function () {
+      debouncedUpdate(getRandomImages(response));
+    };
+
+    // Сортировка по колличеству комментариев
+    var onDiscussedSuccessLoad = function () {
+      debouncedUpdate(getDiscussedImages(response));
+    };
+
+    var defaultSortButton = document.querySelector('#filter-default');
+    var randomSortButton = document.querySelector('#filter-random');
+    var discussedSortButton = document.querySelector('#filter-discussed');
+
+    // Очищает активное состояние кнопок
+    var clearActiveSortState = function () {
+      defaultSortButton.classList.remove('img-filters__button--active');
+      randomSortButton.classList.remove('img-filters__button--active');
+      discussedSortButton.classList.remove('img-filters__button--active');
+    };
+
+    // Нажатие на кнопку сортировки по умолчанию
+    var onDefaultSortButtonClick = function (evt) {
+      evt.preventDefault();
+      clearActiveSortState();
+      clearImages();
+      defaultSortButton.classList.add('img-filters__button--active');
+      onDefaultSuccessLoad();
+    };
+
+    // Нажатие на кнопку сортировки по умолчанию
+    var onRandomSortButtonClick = function (evt) {
+      evt.preventDefault();
+      clearActiveSortState();
+      clearImages();
+      randomSortButton.classList.add('img-filters__button--active');
+      onRandomSuccessLoad();
+    };
+
+    // Нажатие на кнопку сортировки по умолчанию
+    var onDiscussedSortButtonClick = function (evt) {
+      evt.preventDefault();
+      clearActiveSortState();
+      clearImages();
+      discussedSortButton.classList.add('img-filters__button--active');
+      onDiscussedSuccessLoad();
+    };
+
+    var debouncedUpdate = window.debounce(renderImages);
+
+    defaultSortButton.addEventListener('click', onDefaultSortButtonClick);
+    randomSortButton.addEventListener('click', onRandomSortButtonClick);
+    discussedSortButton.addEventListener('click', onDiscussedSortButtonClick);
+
   };
-
-  // Сортировка по умолчанию
-  var onDefaultSuccessLoad = function (response) {
-    debouncedUpdate(response);
-  };
-
-  // Сортировка 10 случайных не повторяющихся изображений
-  var onRandomSuccessLoad = function (response) {
-    debouncedUpdate(getRandomImages(response));
-  };
-
-  // Сортировка по колличеству комментариев
-  var onDiscussedSuccessLoad = function (response) {
-    debouncedUpdate(getDiscussedImages(response));
-  };
-
-  var defaultSortButton = document.querySelector('#filter-default');
-  var randomSortButton = document.querySelector('#filter-random');
-  var discussedSortButton = document.querySelector('#filter-discussed');
-
-  // Очищает активное состояние кнопок
-  var clearActiveSortState = function () {
-    defaultSortButton.classList.remove('img-filters__button--active');
-    randomSortButton.classList.remove('img-filters__button--active');
-    discussedSortButton.classList.remove('img-filters__button--active');
-  };
-
-  // Нажатие на кнопку сортировки по умолчанию
-  var onDefaultSortButtonClick = function (evt) {
-    evt.preventDefault();
-    clearActiveSortState();
-    clearImages();
-    defaultSortButton.classList.add('img-filters__button--active');
-    window.backend.load(onDefaultSuccessLoad, window.data.onRequestError);
-  };
-
-  // Нажатие на кнопку сортировки по умолчанию
-  var onRandomSortButtonClick = function (evt) {
-    evt.preventDefault();
-    clearActiveSortState();
-    clearImages();
-    randomSortButton.classList.add('img-filters__button--active');
-    window.backend.load(onRandomSuccessLoad, window.data.onRequestError);
-  };
-
-  // Нажатие на кнопку сортировки по умолчанию
-  var onDiscussedSortButtonClick = function (evt) {
-    evt.preventDefault();
-    clearActiveSortState();
-    clearImages();
-    discussedSortButton.classList.add('img-filters__button--active');
-    window.backend.load(onDiscussedSuccessLoad, window.data.onRequestError);
-  };
-
-  var debouncedUpdate = window.debounce(renderImages);
-
-  defaultSortButton.addEventListener('click', onDefaultSortButtonClick);
-  randomSortButton.addEventListener('click', onRandomSortButtonClick);
-  discussedSortButton.addEventListener('click', onDiscussedSortButtonClick);
 
   window.backend.load(onSuccessLoad, window.data.onRequestError);
 })();
