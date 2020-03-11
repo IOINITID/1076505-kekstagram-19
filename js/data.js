@@ -23,7 +23,7 @@
   };
 
   // Получение случайного массива
-  var makeRandomArr = function () {
+  var makeRandomArray = function () {
     return Math.random() - 0.5;
   };
 
@@ -48,6 +48,6 @@
     getRandomNumberFromTo: getRandomNumberFromTo,
     getRandomElement: getRandomElement,
     onRequestError: onRequestError,
-    makeRandomArr: makeRandomArr,
+    makeRandomArray: makeRandomArray,
   };
 })();

@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var QUANTITY_OF_IMAGES = 10;
+
   // Создание изображения
   var renderImage = function (imageItem) {
     var template = document.querySelector('#picture').content;
@@ -40,8 +42,14 @@
     });
   };
 
+  // Показывает окно с сортировкой
+  var showSortModal = function () {
+    var sortElement = document.querySelector('.img-filters');
+    sortElement.classList.remove('img-filters--inactive');
+  };
+
   // Отрисовка всех изображений
-  var renderAllImages = function (imageObjects) {
+  var renderImages = function (imageObjects) {
     var imageList = document.querySelector('.pictures');
     var fragment = document.createDocumentFragment();
     imageObjects.forEach(function (item) {
@@ -50,10 +58,8 @@
     imageList.appendChild(fragment);
   };
 
-  // Отрисовка из 10 рандомных изображений
-  var renderRandomImages = function (imageObjects, quantity) {
-    var imageList = document.querySelector('.pictures');
-    var fragment = document.createDocumentFragment();
+  // Получаем 10 случайных не повторяющихся изображений
+  var getRandomImages = function (imageObjects) {
     var newImages = [];
 
     imageObjects.forEach(function (item, i, array) {
@@ -69,58 +75,40 @@
 
     });
 
-    newImages.slice(0, quantity).sort(window.data.makeRandomArr).forEach(function (itemImage) {
-      fragment.appendChild(renderImage(itemImage));
-    });
+    var randomImages = newImages.slice(0, QUANTITY_OF_IMAGES).sort(window.data.makeRandomArray);
 
-    imageList.appendChild(fragment);
+    return randomImages;
   };
 
-  // Отрисовка по количеству комментариев
-  var renderDiscussedImages = function (imageObjects) {
-    var imageList = document.querySelector('.pictures');
-    var fragment = document.createDocumentFragment();
+  // Получаем изображения сортированные по количеству комментариев
+  var getDiscussedImages = function (imageObjects) {
     var sortedArray = imageObjects.sort(function (a, b) {
       return b.comments.length - a.comments.length;
     });
-
-    sortedArray.forEach(function (item) {
-      fragment.appendChild(renderImage(item));
-    });
-
-    imageList.appendChild(fragment);
+    return sortedArray;
   };
 
-  // Показывает окно с сортировкой
-  var showSortModal = function () {
-    var sortElement = document.querySelector('.img-filters');
-    sortElement.classList.remove('img-filters--inactive');
-  };
-
-  // Сортировка по умолчанию
+  // При успешной загрузки с сервера
   var onSuccessLoad = function (response) {
-    renderAllImages(response);
+    renderImages(response);
     showSortModal();
   };
 
   // Сортировка по умолчанию
   var onDefaultSuccessLoad = function (response) {
-    // renderAllImages(response);
-    debouncedDefaultUpdate(response);
+    debouncedUpdate(response);
     showSortModal();
   };
 
-  // Сортировка 10 случайных изображений
+  // Сортировка 10 случайных не повторяющихся изображений
   var onRandomSuccessLoad = function (response) {
-    // renderRandomImages(response, 10);
-    debouncedRandomUpdate(response, 10);
+    debouncedUpdate(getRandomImages(response));
     showSortModal();
   };
 
   // Сортировка по колличеству комментариев
   var onDiscussedSuccessLoad = function (response) {
-    // renderDiscussedImages(response);
-    debouncedDiscussedUpdate(response);
+    debouncedUpdate(getDiscussedImages(response));
     showSortModal();
   };
 
@@ -139,8 +127,8 @@
   var onDefaultSortButtonClick = function (evt) {
     evt.preventDefault();
     clearActiveSortState();
-    defaultSortButton.classList.add('img-filters__button--active');
     clearImages();
+    defaultSortButton.classList.add('img-filters__button--active');
     window.backend.load(onDefaultSuccessLoad, window.data.onRequestError);
   };
 
@@ -148,8 +136,8 @@
   var onRandomSortButtonClick = function (evt) {
     evt.preventDefault();
     clearActiveSortState();
-    randomSortButton.classList.add('img-filters__button--active');
     clearImages();
+    randomSortButton.classList.add('img-filters__button--active');
     window.backend.load(onRandomSuccessLoad, window.data.onRequestError);
   };
 
@@ -157,19 +145,16 @@
   var onDiscussedSortButtonClick = function (evt) {
     evt.preventDefault();
     clearActiveSortState();
-    discussedSortButton.classList.add('img-filters__button--active');
     clearImages();
+    discussedSortButton.classList.add('img-filters__button--active');
     window.backend.load(onDiscussedSuccessLoad, window.data.onRequestError);
   };
 
-  var debouncedDefaultUpdate = window.debounce(renderAllImages);
-  var debouncedRandomUpdate = window.debounce(renderRandomImages);
-  var debouncedDiscussedUpdate = window.debounce(renderDiscussedImages);
+  var debouncedUpdate = window.debounce(renderImages);
 
   defaultSortButton.addEventListener('click', onDefaultSortButtonClick);
   randomSortButton.addEventListener('click', onRandomSortButtonClick);
   discussedSortButton.addEventListener('click', onDiscussedSortButtonClick);
 
-  // window.backend.load(onSuccessLoad, window.data.onRequestError);
   window.backend.load(onSuccessLoad, window.data.onRequestError);
 })();
