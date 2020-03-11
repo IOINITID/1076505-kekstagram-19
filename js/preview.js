@@ -43,9 +43,11 @@
   var renderComments = function (imagesObjectsList) {
     var bigImageSocialComments = document.querySelector('.social__comments');
     var fragment = document.createDocumentFragment();
+
     imagesObjectsList.comments.forEach(function (item) {
       fragment.appendChild(renderComment(item));
     });
+
     deleteComments();
     bigImageSocialComments.appendChild(fragment);
   };

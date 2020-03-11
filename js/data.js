@@ -22,6 +22,11 @@
     return elementList[getRandomNumber(elementList.length - 1)];
   };
 
+  // Получение случайного массива
+  var makeRandomArray = function () {
+    return Math.random() - 0.5;
+  };
+
   // Ошибка выполнения запроса
   var onRequestError = function (errorMessage) {
     var node = document.createElement('div');
@@ -43,5 +48,6 @@
     getRandomNumberFromTo: getRandomNumberFromTo,
     getRandomElement: getRandomElement,
     onRequestError: onRequestError,
+    makeRandomArray: makeRandomArray,
   };
 })();
