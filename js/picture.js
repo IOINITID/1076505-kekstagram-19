@@ -97,19 +97,16 @@
   // Сортировка по умолчанию
   var onDefaultSuccessLoad = function (response) {
     debouncedUpdate(response);
-    showSortModal();
   };
 
   // Сортировка 10 случайных не повторяющихся изображений
   var onRandomSuccessLoad = function (response) {
     debouncedUpdate(getRandomImages(response));
-    showSortModal();
   };
 
   // Сортировка по колличеству комментариев
   var onDiscussedSuccessLoad = function (response) {
     debouncedUpdate(getDiscussedImages(response));
-    showSortModal();
   };
 
   var defaultSortButton = document.querySelector('#filter-default');
