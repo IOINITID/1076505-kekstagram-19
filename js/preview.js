@@ -59,13 +59,10 @@
     }
 
     // Устанавливает фокус при открытии
-    var closeButton = document.querySelector('.big-picture__cancel');
     var bigPicturePreview = document.querySelector('.big-picture__preview');
 
-    closeButton.setAttribute('tabindex', '0');
     bigPicturePreview.setAttribute('tabindex', '0');
     bigPicturePreview.focus();
-
   };
 
   // Отрисовка комментария

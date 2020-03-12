@@ -57,5 +57,4 @@
     load: load,
     save: save,
   };
-
 })();

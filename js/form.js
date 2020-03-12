@@ -61,21 +61,12 @@
 
   // Закрытие формы редактирования изображения
   var onUploadCloseButtonClick = function () {
-    // uploadOverlay.classList.add('hidden');
-    // document.body.classList.remove('modal-open');
-    // scaleControlValue.value = '100%';
-    // document.removeEventListener('keydown', onEscapeButtonPress);
     closeUploadModal();
   };
 
   // Нажатие на кнопку Escape
   var onEscapeButtonPress = function (evt) {
     if (evt.key === window.data.ESC_KEY && evt.target !== hashtagsField && evt.target !== commentField) {
-      // uploadOverlay.classList.add('hidden');
-      // document.body.classList.remove('modal-open');
-      // scaleControlValue.value = '100%';
-      // uploadField.value = '';
-      // document.removeEventListener('keydown', onEscapeButtonPress);
       closeUploadModal();
     }
   };
@@ -332,5 +323,4 @@
       onErrorUpload();
     });
   });
-
 })();
