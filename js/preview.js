@@ -3,7 +3,6 @@
 (function () {
   // Раздел с интерактивными изображениями, который показывает большое изображение
   var showBigImage = function (itemObject) {
-    var QUANTITY_OF_COMMENTS = 5;
     var bigImageModal = document.querySelector('.big-picture');
     var bigImage = bigImageModal.querySelector('.big-picture__img img');
     var bigImageLikes = bigImageModal.querySelector('.likes-count');
@@ -11,8 +10,6 @@
     var bigImageSocialCaption = bigImageModal.querySelector('.social__caption');
     var counterComment = bigImageModal.querySelector('.social__comment-count');
     var commentsLoader = bigImageModal.querySelector('.comments-loader');
-    var commentItems = document.querySelectorAll('.social__comment');
-    var counterItem = 5;
     bigImageModal.classList.remove('hidden');
     bigImage.src = itemObject.url;
     bigImageLikes.textContent = itemObject.likes;
@@ -22,6 +19,10 @@
     counterComment.classList.add('hidden');
     commentsLoader.classList.add('hidden');
     document.body.classList.add('modal-open');
+
+    var QUANTITY_OF_COMMENTS = 5;
+    var commentItems = document.querySelectorAll('.social__comment');
+    var counterItem = QUANTITY_OF_COMMENTS;
 
     // Скрывает все комментарии
     var hideAllComments = function () {
@@ -49,9 +50,9 @@
     };
 
     if (itemObject.comments.length > QUANTITY_OF_COMMENTS) {
-      commentsLoader.classList.remove('hidden');
       hideAllComments();
       showComments();
+      commentsLoader.classList.remove('hidden');
       commentsLoader.addEventListener('click', onCommentsLoaderButtonClick);
     }
   };
