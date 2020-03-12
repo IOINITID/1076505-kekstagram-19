@@ -3,6 +3,7 @@
 (function () {
   // Раздел с интерактивными изображениями, который показывает большое изображение
   var showBigImage = function (itemObject) {
+    var QUANTITY_OF_COMMENTS = 5;
     var bigImageModal = document.querySelector('.big-picture');
     var bigImage = bigImageModal.querySelector('.big-picture__img img');
     var bigImageLikes = bigImageModal.querySelector('.likes-count');
@@ -10,6 +11,7 @@
     var bigImageSocialCaption = bigImageModal.querySelector('.social__caption');
     var counterComment = bigImageModal.querySelector('.social__comment-count');
     var commentsLoader = bigImageModal.querySelector('.comments-loader');
+
     bigImageModal.classList.remove('hidden');
     bigImage.src = itemObject.url;
     bigImageLikes.textContent = itemObject.likes;
@@ -19,6 +21,42 @@
     counterComment.classList.add('hidden');
     commentsLoader.classList.add('hidden');
     document.body.classList.add('modal-open');
+
+    // Подзагрузка комментариев по нажатию
+    var commentItems = document.querySelectorAll('.social__comment');
+    var counterItem = QUANTITY_OF_COMMENTS;
+
+    // Скрывает все комментарии
+    var hideAllComments = function () {
+      commentItems.forEach(function (item) {
+        item.style.display = 'none';
+      });
+    };
+
+    // Показывает комменарии по условию
+    var showComments = function () {
+      commentItems.forEach(function (item, i) {
+        if (i < counterItem) {
+          item.style.display = 'flex';
+        }
+      });
+    };
+
+    // Событие нажатия на кнопку загурзить еще
+    var onCommentsLoaderButtonClick = function () {
+      counterItem += 5;
+      showComments();
+      if (itemObject.comments.length <= counterItem) {
+        commentsLoader.classList.add('hidden');
+      }
+    };
+
+    if (itemObject.comments.length > QUANTITY_OF_COMMENTS) {
+      hideAllComments();
+      showComments();
+      commentsLoader.classList.remove('hidden');
+      commentsLoader.addEventListener('click', onCommentsLoaderButtonClick);
+    }
   };
 
   // Отрисовка комментария
