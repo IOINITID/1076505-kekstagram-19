@@ -45,20 +45,35 @@
   };
 
   // Получаем 10 случайных не повторяющихся изображений
+  // var getRandomImages = function (imageObjects) {
+  //   var newImages = [];
+
+  //   imageObjects.forEach(function (item, i, array) {
+  //     var currentItem = imageObjects[i];
+
+  //     array.forEach(function (itemElement, index) {
+  //       if (currentItem.url !== array[index].url) {
+  //         newImages[index] = array[index];
+  //       } else {
+  //         newImages[0] = array[index];
+  //       }
+  //     });
+
+  //   });
+
+  //   var randomImages = newImages.slice(0, QUANTITY_OF_IMAGES).sort(window.data.getRandomArray);
+
+  //   return randomImages;
+  // };
+
+  // Получаем 10 случайных не повторяющихся изображений
   var getRandomImages = function (imageObjects) {
     var newImages = [];
 
-    imageObjects.forEach(function (item, i, array) {
-      var currentItem = imageObjects[i];
-
-      array.forEach(function (itemElement, index) {
-        if (currentItem.url !== array[index].url) {
-          newImages[index] = array[index];
-        } else {
-          newImages[0] = array[index];
-        }
-      });
-
+    imageObjects.forEach(function (item) {
+      if (!newImages.includes(item)) {
+        newImages.push(item);
+      }
     });
 
     var randomImages = newImages.slice(0, QUANTITY_OF_IMAGES).sort(window.data.getRandomArray);

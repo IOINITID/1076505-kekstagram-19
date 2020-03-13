@@ -14,6 +14,9 @@
     onlyUniqueHashtags: 'Повторяющиеся хештеги не допустимы.',
     invalidSymbols: 'Допустим ввод только букв и цифр.'
   };
+  var SCALE_MIN_VALUE = 25;
+  var SCALE_MAX_VALUE = 100;
+  var SCALE_STEP = 25;
   var hashtagsField = document.querySelector('.text__hashtags');
   var commentField = document.querySelector('.text__description');
   var uploadOverlay = document.querySelector('.img-upload__overlay');
@@ -72,16 +75,14 @@
   };
 
   var onImageScaleButtonClick = function (evt) {
-    var SCALE_MIN_VALUE = 25;
-    var SCALE_MAX_VALUE = 100;
     var scaleControlValueItem = parseInt(scaleControlValue.value, 10);
     var scaleValue;
     if (evt.target === scaleControlSmaller && scaleControlValueItem !== SCALE_MIN_VALUE) {
-      scaleControlValue.value = (scaleControlValueItem - 25) + '%';
-      scaleValue = 'scale(' + (scaleControlValueItem - 25) / 100 + ')';
+      scaleControlValue.value = (scaleControlValueItem - SCALE_STEP) + '%';
+      scaleValue = 'scale(' + (scaleControlValueItem - SCALE_STEP) / 100 + ')';
     } else if (evt.target === scaleControlBigger && scaleControlValueItem !== SCALE_MAX_VALUE) {
-      scaleControlValue.value = (scaleControlValueItem + 25) + '%';
-      scaleValue = 'scale(' + (scaleControlValueItem + 25) / 100 + ')';
+      scaleControlValue.value = (scaleControlValueItem + SCALE_STEP) + '%';
+      scaleValue = 'scale(' + (scaleControlValueItem + SCALE_STEP) / 100 + ')';
     }
     uploadImagePreview.style.transform = scaleValue;
   };
@@ -279,7 +280,7 @@
 
   var onSuccessEscKeydown = function (evt) {
     var successElement = document.querySelector('.success');
-    if (evt.key === window.data.ESC_KEY) {
+    if (successElement && evt.key === window.data.ESC_KEY) {
       successElement.remove();
       document.removeEventListener('keydown', onSuccessEscKeydown);
     }
