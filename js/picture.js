@@ -44,6 +44,7 @@
     imageList.appendChild(fragment);
   };
 
+
   // Получаем 10 случайных не повторяющихся изображений
   var getRandomImages = function (imageObjects) {
     var newImages = [];
