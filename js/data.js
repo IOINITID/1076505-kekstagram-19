@@ -21,7 +21,7 @@
     return elementList[getRandomNumber(elementList.length - 1)];
   };
 
-  // Получение случайного массива элементов
+  // Получение случайного массива
   var getRandomArray = function (items) {
     for (var i = items.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
@@ -31,7 +31,6 @@
     }
     return items;
   };
-
 
   // Ошибка выполнения запроса
   var onRequestError = function (errorMessage) {
