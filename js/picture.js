@@ -46,16 +46,9 @@
 
   // Получаем 10 случайных не повторяющихся изображений
   var getRandomImages = function (imageObjects) {
-    var newImages = [];
-
-    imageObjects.forEach(function (item) {
-      if (!newImages.includes(item)) {
-        newImages.push(item);
-      }
-    });
-
-    var randomImages = newImages.slice(0, QUANTITY_OF_IMAGES).sort(window.data.getRandomArray);
-
+    var newImages = imageObjects.slice();
+    newImages = window.data.getRandomArray(newImages);
+    var randomImages = newImages.slice(0, QUANTITY_OF_IMAGES);
     return randomImages;
   };
 
