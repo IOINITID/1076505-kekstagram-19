@@ -2,7 +2,6 @@
 
 (function () {
   // Объявление переменных и констант
-  var QUANTITY_OF_IMAGES = 25;
   var ENTER_KEY = 'Enter';
   var ESC_KEY = 'Escape';
 
@@ -43,7 +42,6 @@
   window.data = {
     ESC_KEY: ESC_KEY,
     ENTER_KEY: ENTER_KEY,
-    QUANTITY_OF_IMAGES: QUANTITY_OF_IMAGES,
     getRandomNumber: getRandomNumber,
     getRandomNumberFromTo: getRandomNumberFromTo,
     getRandomElement: getRandomElement,

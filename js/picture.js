@@ -61,17 +61,17 @@
 
     });
 
-    var randomImages = newImages.slice(0, QUANTITY_OF_IMAGES).sort(window.data.makeRandomArray);
+    var randomImages = newImages.slice(0, QUANTITY_OF_IMAGES).sort(window.data.getRandomArray);
 
     return randomImages;
   };
 
   // Получаем изображения сортированные по количеству комментариев
   var getDiscussedImages = function (imageObjects) {
-    var sortedArray = imageObjects.sort(function (a, b) {
+    var sortedImages = imageObjects.sort(function (a, b) {
       return b.comments.length - a.comments.length;
     });
-    return sortedArray;
+    return sortedImages;
   };
 
   // При успешной загрузки с сервера
