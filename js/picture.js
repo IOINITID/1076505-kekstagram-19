@@ -3,6 +3,7 @@
 (function () {
   var QUANTITY_OF_IMAGES = 10;
 
+
   // Создание изображения
   var renderImage = function (imageItem) {
     var template = document.querySelector('#picture').content;
