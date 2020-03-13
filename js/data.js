@@ -32,6 +32,7 @@
     return items;
   };
 
+
   // Ошибка выполнения запроса
   var onRequestError = function (errorMessage) {
     var node = document.createElement('div');
