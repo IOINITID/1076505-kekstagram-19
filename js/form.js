@@ -17,6 +17,9 @@
   var SCALE_MIN_VALUE = 25;
   var SCALE_MAX_VALUE = 100;
   var SCALE_STEP = 25;
+  var MAX_EFFECT_PHOBOS_VALUE = 3;
+  var MIN_EFFECT_HEAT_VALUE = 1;
+  var MAX_EFFECT_HEAT_VALUE = 2;
   var hashtagsField = document.querySelector('.text__hashtags');
   var commentField = document.querySelector('.text__description');
   var uploadOverlay = document.querySelector('.img-upload__overlay');
@@ -99,7 +102,6 @@
     } else {
       uploadImagePreview.className = 'effects__preview--' + evt.target.value;
       effectsSlider.style.display = 'block';
-
       effectLevelValue.value = 100;
       effectLevelDepth.style.width = '100%';
       effectLevelPin.style.left = effectLevelLine.clientWidth + 'px';
@@ -110,6 +112,14 @@
 
   var getEffectLevelValue = function () {
     return Math.round(effectLevelPin.offsetLeft / effectLevelLine.offsetWidth * 100);
+  };
+
+  var getPhobosEffectValue = function () {
+    return getEffectLevelValue() / 100 * MAX_EFFECT_PHOBOS_VALUE;
+  };
+
+  var getHeatEffectValue = function () {
+    return (getEffectLevelValue() / 100 * MAX_EFFECT_HEAT_VALUE) + MIN_EFFECT_HEAT_VALUE;
   };
 
   var onEffectPinMouseUp = function () {
@@ -128,10 +138,10 @@
         uploadImagePreview.style.filter = 'invert(' + getEffectLevelValue() + '%)';
         break;
       case 'effects__preview--phobos':
-        uploadImagePreview.style.filter = 'blur(' + (getEffectLevelValue() / 10) / 3 + 'px)';
+        uploadImagePreview.style.filter = 'blur(' + getPhobosEffectValue() + 'px)';
         break;
       case 'effects__preview--heat':
-        uploadImagePreview.style.filter = 'brightness(' + (getEffectLevelValue() / 100 * 2) + 1 + ')';
+        uploadImagePreview.style.filter = 'brightness(' + getHeatEffectValue() + ')';
         break;
       default:
         uploadImagePreview.style.filter = 'none';
